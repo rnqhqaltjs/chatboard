@@ -35,4 +35,12 @@ public class Board {
     @LastModifiedDate
     @Column
     private LocalDateTime updatedAt;
+
+    public Board(String title, String content, boolean isAnonymous,  Member member) {
+        this.title = title;
+        this.content = content;
+        this.isAnonymous = isAnonymous;
+        this.member = member;
+        this.viewCnt = 0;
+    }
 }
