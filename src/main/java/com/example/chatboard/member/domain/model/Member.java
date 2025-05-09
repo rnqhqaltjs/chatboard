@@ -31,11 +31,11 @@ public class Member {
     @Column(updatable = false)
     private LocalDateTime createdAt;
 
-    public Member(String nickname, String email, String password, MemberRole role) {
+    public Member(String nickname, String email, String password) {
         this.nickname = nickname;
         this.email = email;
         this.password = password;
-        this.role = role;
+        this.role = MemberRole.USER;
     }
 
     public String getFormattedDateAsString() {

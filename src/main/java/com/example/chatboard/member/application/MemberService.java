@@ -1,15 +1,16 @@
 package com.example.chatboard.member.application;
 
 import com.example.chatboard.member.domain.model.Member;
-import com.example.chatboard.member.domain.model.MemberRole;
+import com.example.chatboard.member.presentation.dto.request.LoginRequest;
 import com.example.chatboard.member.presentation.dto.request.SignUpRequest;
 import com.example.chatboard.member.infrastructure.MemberRepository;
+import com.example.chatboard.member.presentation.dto.response.LoginResponse;
 import com.example.chatboard.member.presentation.dto.response.SignUpResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.chatboard.member.application.MemberServiceHelper.validateDuplicateEmail;
+import static com.example.chatboard.member.application.MemberServiceHelper.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +25,8 @@ public class MemberService {
         Member member = new Member(
                 request.getNickname(),
                 request.getEmail(),
-                request.getPassword(),
-                MemberRole.USER);
+                request.getPassword());
+
         memberRepository.save(member);
 
         return new SignUpResponse(
@@ -33,4 +34,13 @@ public class MemberService {
                 member.getEmail(),
                 member.getFormattedDateAsString());
     }
+
+//    @Transactional
+//    public LoginResponse login(LoginRequest request) {
+//        Member member = validateExistMember(memberRepository, request.getEmail());
+//        validatePassword(member.getPassword(), request.getPassword());
+//
+//        String token = jwtTokenProvider.generateToken(member);
+//        return new LoginResponse(token);
+//    }
 }
