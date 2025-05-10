@@ -1,7 +1,9 @@
 package com.example.chatboard.member.presentation.api;
 
 import com.example.chatboard.member.application.MemberService;
+import com.example.chatboard.member.presentation.dto.request.LoginRequest;
 import com.example.chatboard.member.presentation.dto.request.SignUpRequest;
+import com.example.chatboard.member.presentation.dto.response.LoginResponse;
 import com.example.chatboard.member.presentation.dto.response.SignUpResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,5 +23,10 @@ public class MemberController {
     @PostMapping("/signup")
     public ResponseEntity<SignUpResponse> signUp(@RequestBody SignUpRequest request) {
         return new ResponseEntity<>(memberService.signUp(request), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginResponse> login(@RequestBody LoginRequest request) {
+        return new ResponseEntity<>(memberService.login(request), HttpStatus.OK);
     }
 }

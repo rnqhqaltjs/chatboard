@@ -1,5 +1,6 @@
 package com.example.chatboard.member.application;
 
+import com.example.chatboard.global.security.JwtTokenProvider;
 import com.example.chatboard.member.domain.model.Member;
 import com.example.chatboard.member.presentation.dto.request.LoginRequest;
 import com.example.chatboard.member.presentation.dto.request.SignUpRequest;
@@ -17,6 +18,7 @@ import static com.example.chatboard.member.application.MemberServiceHelper.*;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final JwtTokenProvider jwtTokenProvider;
 
     @Transactional
     public SignUpResponse signUp(SignUpRequest request) {
@@ -35,12 +37,12 @@ public class MemberService {
                 member.getFormattedDateAsString());
     }
 
-//    @Transactional
-//    public LoginResponse login(LoginRequest request) {
-//        Member member = validateExistMember(memberRepository, request.getEmail());
-//        validatePassword(member.getPassword(), request.getPassword());
-//
-//        String token = jwtTokenProvider.generateToken(member);
-//        return new LoginResponse(token);
-//    }
+    @Transactional
+    public LoginResponse login(LoginRequest request) {
+        Member member = validateExistMember(memberRepository, request.getEmail());
+        validatePassword(member.getPassword(), request.getPassword());
+
+        String token = jwtTokenProvider.generateToken(member);
+        return new LoginResponse(token);
+    }
 }
