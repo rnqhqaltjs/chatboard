@@ -7,6 +7,7 @@ import com.example.chatboard.member.presentation.exception.InvalidPasswordExcept
 import com.example.chatboard.member.presentation.exception.NotFoundMemberException;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class MemberServiceHelper {
@@ -32,8 +33,8 @@ public class MemberServiceHelper {
     /**
      * 로그인 시 비밀번호 유효성 검사
      */
-    public static void validatePassword(String rawPassword, String memberPassword) {
-        if (!rawPassword.equals(memberPassword)) {
+    public static void validatePassword(String rawPassword, String encodedPassword, PasswordEncoder passwordEncoder) {
+        if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
             throw new InvalidPasswordException();
         }
     }
