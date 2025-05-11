@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BoardCommandService {
 
-    public Board create(String title, String content, boolean isAnonymous, Member member) {
-        return new Board(title, content, isAnonymous, member);
+    public Board create(String title, String content, Member member) {
+        return new Board(title, content, member);
     }
 }

@@ -26,7 +26,6 @@ public class Board {
     private String title;
     private String content;
     private Integer viewCnt;
-    private boolean isAnonymous;
 
     @CreatedDate
     @Column(updatable = false)
@@ -36,10 +35,9 @@ public class Board {
     @Column
     private LocalDateTime updatedAt;
 
-    public Board(String title, String content, boolean isAnonymous,  Member member) {
+    public Board(String title, String content, Member member) {
         this.title = title;
         this.content = content;
-        this.isAnonymous = isAnonymous;
         this.member = member;
         this.viewCnt = 0;
     }

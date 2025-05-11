@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.example.chatboard.member.application.MemberServiceHelper.validateExistMember;
+
 @Service
 @RequiredArgsConstructor
 public class BoardService {
@@ -19,10 +21,9 @@ public class BoardService {
 
     @Transactional
     public Long create(Long memberId, BoardCreateRequest request) {
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+        Member member = validateExistMember(memberRepository, memberId);
 
-        Board board = boardCommandService.create(request.getTitle(), request.getContent(), request.isAnonymous(), member);
+        Board board = boardCommandService.create(request.getTitle(), request.getContent(), member);
         boardRepository.save(board);
 
         return board.getId();
