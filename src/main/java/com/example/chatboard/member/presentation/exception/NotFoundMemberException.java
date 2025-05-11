@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 
 public class NotFoundMemberException extends BusinessException {
 
-    private static final String MESSAGE = "존재하지 않는 이메일입니다.";
+    private static final String MESSAGE = "존재하지 않는 회원입니다.";
 
     public NotFoundMemberException() {
         super(HttpStatus.UNAUTHORIZED, MESSAGE);

@@ -25,9 +25,7 @@ public class MemberServiceHelper {
      */
     public static Member validateExistMember(MemberRepository memberRepository, String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> {
-                    throw new NotFoundMemberException();
-                });
+                .orElseThrow(NotFoundMemberException::new);
     }
 
     /**
@@ -37,5 +35,13 @@ public class MemberServiceHelper {
         if (!passwordEncoder.matches(rawPassword, encodedPassword)) {
             throw new InvalidPasswordException();
         }
+    }
+
+    /**
+     * ID로 회원 존재 여부 검사
+     */
+    public static Member validateExistMember(MemberRepository memberRepository, Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(NotFoundMemberException::new);
     }
 }
