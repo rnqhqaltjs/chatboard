@@ -2,8 +2,9 @@ package com.example.chatboard.board.application;
 
 import com.example.chatboard.board.domain.model.Board;
 import com.example.chatboard.board.infrastructure.BoardRepository;
-import com.example.chatboard.board.presentation.dto.BoardCreateRequest;
-import com.example.chatboard.board.presentation.dto.BoardUpdateRequest;
+import com.example.chatboard.board.presentation.dto.request.BoardCreateRequest;
+import com.example.chatboard.board.presentation.dto.request.BoardUpdateRequest;
+import com.example.chatboard.board.presentation.dto.response.BoardResponse;
 import com.example.chatboard.member.domain.model.Member;
 import com.example.chatboard.member.infrastructure.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.chatboard.board.application.BoardServiceHelper.validateBoardOwner;
+import static com.example.chatboard.board.application.BoardServiceHelper.validateExistBoard;
 import static com.example.chatboard.member.application.MemberServiceHelper.validateExistMember;
 
 @Service
@@ -27,6 +29,22 @@ public class BoardService {
         boardRepository.save(board);
 
         return board.getId();
+    }
+
+    @Transactional
+    public BoardResponse findById(Long boardId) {
+        Board board = validateExistBoard(boardRepository, boardId);
+
+        board.increaseViewCount();
+
+        return new BoardResponse(
+                board.getId(),
+                board.getTitle(),
+                board.getContent(),
+                board.getMember().getNickname(),
+                board.getViewCnt(),
+                board.getUpdatedAt()
+        );
     }
 
     @Transactional

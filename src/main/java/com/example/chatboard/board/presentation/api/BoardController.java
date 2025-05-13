@@ -1,8 +1,9 @@
 package com.example.chatboard.board.presentation.api;
 
 import com.example.chatboard.board.application.BoardService;
-import com.example.chatboard.board.presentation.dto.BoardCreateRequest;
-import com.example.chatboard.board.presentation.dto.BoardUpdateRequest;
+import com.example.chatboard.board.presentation.dto.request.BoardCreateRequest;
+import com.example.chatboard.board.presentation.dto.request.BoardUpdateRequest;
+import com.example.chatboard.board.presentation.dto.response.BoardResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -22,9 +23,12 @@ public class BoardController {
             @AuthenticationPrincipal(expression = "id") Long memberId,
             @Valid @RequestBody BoardCreateRequest request
     ) {
-        Long boardId = boardService.create(memberId, request);
+        return new ResponseEntity<>(boardService.create(memberId, request), HttpStatus.CREATED);
+    }
 
-        return new ResponseEntity<>(boardId, HttpStatus.CREATED);
+    @GetMapping("/{boardId}")
+    public ResponseEntity<BoardResponse> findById(@PathVariable Long boardId) {
+        return new ResponseEntity<>(boardService.findById(boardId), HttpStatus.OK);
     }
 
     @PutMapping("/{boardId}")

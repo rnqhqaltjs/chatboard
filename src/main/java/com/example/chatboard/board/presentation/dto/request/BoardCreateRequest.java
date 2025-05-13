@@ -1,4 +1,4 @@
-package com.example.chatboard.board.presentation.dto;
+package com.example.chatboard.board.presentation.dto.request;
 
 import lombok.AccessLevel;
 import lombok.Getter;
