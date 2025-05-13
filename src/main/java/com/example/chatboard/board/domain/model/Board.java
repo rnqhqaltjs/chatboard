@@ -43,4 +43,9 @@ public class Board {
         this.member = member;
         this.viewCnt = 0;
     }
+
+    public void updateContent(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 }

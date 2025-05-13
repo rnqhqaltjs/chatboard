@@ -3,6 +3,7 @@ package com.example.chatboard.board.application;
 import com.example.chatboard.board.domain.model.Board;
 import com.example.chatboard.board.infrastructure.BoardRepository;
 import com.example.chatboard.board.presentation.dto.BoardCreateRequest;
+import com.example.chatboard.board.presentation.dto.BoardUpdateRequest;
 import com.example.chatboard.member.domain.model.Member;
 import com.example.chatboard.member.infrastructure.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,13 @@ public class BoardService {
         boardRepository.save(board);
 
         return board.getId();
+    }
+
+    @Transactional
+    public void update(Long memberId, Long boardId, BoardUpdateRequest request) {
+        Board board = validateBoardOwner(boardRepository, boardId, memberId);
+
+        board.updateContent(request.getTitle(), request.getContent());
     }
 
     @Transactional
