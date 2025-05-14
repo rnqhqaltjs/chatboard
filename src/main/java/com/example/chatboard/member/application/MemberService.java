@@ -47,7 +47,11 @@ public class MemberService {
                 member.getPassword(),
                 passwordEncoder);
 
-        String token = jwtTokenProvider.generateToken(member);
-        return new LoginResponse(token);
+        String accessToken = jwtTokenProvider.generateAccessToken(member);
+        String refreshToken = jwtTokenProvider.generateRefreshToken(member);
+
+        return new LoginResponse(
+                accessToken,
+                refreshToken);
     }
 }

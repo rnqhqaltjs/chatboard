@@ -1,6 +1,5 @@
 package com.example.chatboard.global.security;
 
-import com.example.chatboard.member.application.MemberService;
 import com.example.chatboard.member.domain.model.Member;
 import com.example.chatboard.member.infrastructure.MemberRepository;
 import io.jsonwebtoken.Claims;
@@ -31,8 +30,11 @@ public class JwtTokenProvider {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    @Value("${jwt.expiration}")
-    private long tokenValidityMillis;
+    @Value("${jwt.access-token-expiration}")
+    private long accessTokenValidityMillis;
+
+    @Value("${jwt.refresh-token-expiration}")
+    private long refreshTokenValidityMillis;
 
     private SecretKey key;
 
@@ -41,9 +43,9 @@ public class JwtTokenProvider {
         this.key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
     }
 
-    public String generateToken(Member member) {
+    public String generateToken(Member member, long validityMillis) {
         Date now = new Date();
-        Date expiryDate = new Date(now.getTime() + tokenValidityMillis);
+        Date expiryDate = new Date(now.getTime() + validityMillis);
 
         return Jwts.builder()
                 .subject(String.valueOf(member.getId()))
@@ -52,6 +54,14 @@ public class JwtTokenProvider {
                 .expiration(expiryDate)
                 .signWith(key)
                 .compact();
+    }
+
+    public String generateAccessToken(Member member) {
+        return generateToken(member, accessTokenValidityMillis);
+    }
+
+    public String generateRefreshToken(Member member) {
+        return generateToken(member, refreshTokenValidityMillis);
     }
 
     public boolean validateToken(String token) {
