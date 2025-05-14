@@ -4,10 +4,14 @@ import com.example.chatboard.board.domain.model.Board;
 import com.example.chatboard.board.infrastructure.BoardRepository;
 import com.example.chatboard.board.presentation.dto.request.BoardCreateRequest;
 import com.example.chatboard.board.presentation.dto.request.BoardUpdateRequest;
+import com.example.chatboard.board.presentation.dto.response.BoardPageResponse;
+import com.example.chatboard.board.presentation.dto.response.BoardPreviewResponse;
 import com.example.chatboard.board.presentation.dto.response.BoardResponse;
 import com.example.chatboard.member.domain.model.Member;
 import com.example.chatboard.member.infrastructure.MemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,6 +49,12 @@ public class BoardService {
                 board.getViewCnt(),
                 board.getUpdatedAt()
         );
+    }
+
+    @Transactional(readOnly = true)
+    public BoardPageResponse findAll(Pageable pageable) {
+        Page<Board> boards = boardRepository.findAll(pageable);
+        return BoardPageResponse.from(boards);
     }
 
     @Transactional

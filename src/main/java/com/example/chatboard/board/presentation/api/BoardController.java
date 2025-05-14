@@ -3,9 +3,13 @@ package com.example.chatboard.board.presentation.api;
 import com.example.chatboard.board.application.BoardService;
 import com.example.chatboard.board.presentation.dto.request.BoardCreateRequest;
 import com.example.chatboard.board.presentation.dto.request.BoardUpdateRequest;
+import com.example.chatboard.board.presentation.dto.response.BoardPageResponse;
 import com.example.chatboard.board.presentation.dto.response.BoardResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -29,6 +33,11 @@ public class BoardController {
     @GetMapping("/{boardId}")
     public ResponseEntity<BoardResponse> findById(@PathVariable Long boardId) {
         return new ResponseEntity<>(boardService.findById(boardId), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<BoardPageResponse> findAll(@PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+        return new ResponseEntity<>(boardService.findAll(pageable), HttpStatus.OK);
     }
 
     @PutMapping("/{boardId}")
