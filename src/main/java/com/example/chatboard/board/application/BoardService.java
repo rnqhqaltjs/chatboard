@@ -6,6 +6,7 @@ import com.example.chatboard.board.presentation.dto.request.BoardCreateRequest;
 import com.example.chatboard.board.presentation.dto.request.BoardUpdateRequest;
 import com.example.chatboard.board.presentation.dto.response.BoardPageResponse;
 import com.example.chatboard.board.presentation.dto.response.BoardResponse;
+import com.example.chatboard.board.presentation.exception.BoardNotOwnedException;
 import com.example.chatboard.member.domain.model.Member;
 import com.example.chatboard.member.infrastructure.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,8 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.chatboard.board.application.BoardServiceHelper.validateBoardOwner;
 import static com.example.chatboard.board.application.BoardServiceHelper.validateExistBoard;
+import static com.example.chatboard.board.application.BoardServiceHelper.validateExistBoardWithMember;
 import static com.example.chatboard.member.application.MemberServiceHelper.validateExistMember;
 
 @Service
@@ -51,14 +52,22 @@ public class BoardService {
 
     @Transactional
     public void update(Long memberId, Long boardId, BoardUpdateRequest request) {
-        Board board = validateBoardOwner(boardRepository, boardId, memberId);
+        Board board = validateExistBoardWithMember(boardRepository, boardId);
+
+        if (!board.getMember().getId().equals(memberId)) {
+            throw new BoardNotOwnedException();
+        }
 
         board.updateContent(request.getTitle(), request.getContent());
     }
 
     @Transactional
     public void delete(Long memberId, Long boardId) {
-        Board board = validateBoardOwner(boardRepository, boardId, memberId);
+        Board board = validateExistBoardWithMember(boardRepository, boardId);
+
+        if (!board.getMember().getId().equals(memberId)) {
+            throw new BoardNotOwnedException();
+        }
 
         boardRepository.delete(board);
     }
