@@ -61,4 +61,19 @@ public class CommentService {
 
         comment.updateContent(request.getContent());
     }
+
+    @Transactional
+    public void delete(Long memberId, Long boardId, Long commentId) {
+        Comment comment = validateExistCommentWithBoardAndMember(commentRepository, commentId);
+
+        if (!comment.getBoard().getId().equals(boardId)) {
+            throw new CommentBoardMismatchException();
+        }
+
+        if (!comment.getMember().getId().equals(memberId)) {
+            throw new CommentNotOwnedException();
+        }
+
+        commentRepository.delete(comment);
+    }
 }
