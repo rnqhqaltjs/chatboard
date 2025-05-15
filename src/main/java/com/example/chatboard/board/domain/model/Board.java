@@ -1,5 +1,7 @@
 package com.example.chatboard.board.domain.model;
 
+import com.example.chatboard.comment.domain.model.Comment;
+import com.example.chatboard.global.common.BaseTimeEntity;
 import com.example.chatboard.member.domain.model.Member;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -10,12 +12,13 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EntityListeners(AuditingEntityListener.class)
 @Getter
-public class Board {
+public class Board extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,13 +32,8 @@ public class Board {
     private String content;
     private Integer viewCnt;
 
-    @CreatedDate
-    @Column(updatable = false)
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column
-    private LocalDateTime updatedAt;
+    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
 
     public Board(String title, String content, Member member) {
         this.title = title;

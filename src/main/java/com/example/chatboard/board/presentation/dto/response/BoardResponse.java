@@ -1,5 +1,6 @@
 package com.example.chatboard.board.presentation.dto.response;
 
+import com.example.chatboard.board.domain.model.Board;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -12,14 +13,25 @@ public class BoardResponse {
     private String content;
     private String nickName;
     private Integer viewCnt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
 
-    public BoardResponse(Long id, String title, String content, String nickName, Integer viewCnt, LocalDateTime updatedAt) {
+    public BoardResponse(Long id, String title, String content, String nickName, Integer viewCnt, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.nickName = nickName;
         this.viewCnt = viewCnt;
-        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
+    }
+
+    public static BoardResponse from(Board board) {
+        return new BoardResponse(
+                board.getId(),
+                board.getTitle(),
+                board.getContent(),
+                board.getMember().getNickname(),
+                board.getViewCnt(),
+                board.getCreatedAt()
+        );
     }
 }

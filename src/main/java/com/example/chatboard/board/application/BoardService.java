@@ -5,7 +5,6 @@ import com.example.chatboard.board.infrastructure.BoardRepository;
 import com.example.chatboard.board.presentation.dto.request.BoardCreateRequest;
 import com.example.chatboard.board.presentation.dto.request.BoardUpdateRequest;
 import com.example.chatboard.board.presentation.dto.response.BoardPageResponse;
-import com.example.chatboard.board.presentation.dto.response.BoardPreviewResponse;
 import com.example.chatboard.board.presentation.dto.response.BoardResponse;
 import com.example.chatboard.member.domain.model.Member;
 import com.example.chatboard.member.infrastructure.MemberRepository;
@@ -41,14 +40,7 @@ public class BoardService {
 
         board.increaseViewCount();
 
-        return new BoardResponse(
-                board.getId(),
-                board.getTitle(),
-                board.getContent(),
-                board.getMember().getNickname(),
-                board.getViewCnt(),
-                board.getUpdatedAt()
-        );
+        return BoardResponse.from(board);
     }
 
     @Transactional(readOnly = true)

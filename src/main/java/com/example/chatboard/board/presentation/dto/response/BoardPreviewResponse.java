@@ -12,14 +12,14 @@ public class BoardPreviewResponse {
     private String title;
     private String nickName;
     private Integer viewCnt;
-    private LocalDateTime updatedAt;
+    private LocalDateTime createdAt;
 
-    public BoardPreviewResponse(Long id, String title, String nickName, Integer viewCnt, LocalDateTime updatedAt) {
+    public BoardPreviewResponse(Long id, String title, String nickName, Integer viewCnt, LocalDateTime createdAt) {
         this.id = id;
         this.title = title;
         this.nickName = nickName;
         this.viewCnt = viewCnt;
-        this.updatedAt = updatedAt;
+        this.createdAt = createdAt;
     }
 
     public static BoardPreviewResponse from(Board board) {
@@ -28,7 +28,7 @@ public class BoardPreviewResponse {
                 board.getTitle(),
                 board.getMember().getNickname(),
                 board.getViewCnt(),
-                board.getUpdatedAt()
+                board.getCreatedAt()
         );
     }
 }
