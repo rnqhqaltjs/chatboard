@@ -2,6 +2,7 @@ package com.example.chatboard.comment.presentation.api;
 
 import com.example.chatboard.comment.application.CommentService;
 import com.example.chatboard.comment.presentation.dto.request.CommentCreateRequest;
+import com.example.chatboard.comment.presentation.dto.request.CommentUpdateRequest;
 import com.example.chatboard.comment.presentation.dto.response.CommentPageResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -35,5 +36,17 @@ public class CommentController {
             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable
     ) {
         return new ResponseEntity<>(commentService.findAll(boardId, pageable), HttpStatus.OK);
+    }
+
+    @PutMapping("/{commentId}")
+    public ResponseEntity<Void> update(
+            @AuthenticationPrincipal(expression = "id") Long memberId,
+            @PathVariable Long boardId,
+            @PathVariable Long commentId,
+            @Valid @RequestBody CommentUpdateRequest request
+    ) {
+        commentService.update(memberId, boardId, commentId, request);
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
