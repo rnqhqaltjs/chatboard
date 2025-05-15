@@ -36,7 +36,7 @@ public class BoardController {
     }
 
     @GetMapping
-    public ResponseEntity<BoardPageResponse> findAll(@PageableDefault(sort = "id", direction = Sort.Direction.ASC) Pageable pageable) {
+    public ResponseEntity<BoardPageResponse> findAll(@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         return new ResponseEntity<>(boardService.findAll(pageable), HttpStatus.OK);
     }
 

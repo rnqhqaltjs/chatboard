@@ -4,7 +4,7 @@ import com.example.chatboard.comment.domain.model.Comment;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,18 +14,26 @@ import java.util.stream.Collectors;
 public class CommentPageResponse {
 
     private boolean hasNext;
+    private int totalPages;
+    private long totalElements;
     private List<CommentResponse> comments;
 
-    public CommentPageResponse(boolean hasNext, List<CommentResponse> comments) {
+    public CommentPageResponse(boolean hasNext, int totalPages, long totalElements, List<CommentResponse> comments) {
         this.hasNext = hasNext;
+        this.totalPages = totalPages;
+        this.totalElements = totalElements;
         this.comments = comments;
     }
 
-    public static CommentPageResponse from(Slice<Comment> page) {
+    public static CommentPageResponse from(Page<Comment> page) {
         List<CommentResponse> comments = page.getContent().stream()
                 .map(CommentResponse::from)
                 .collect(Collectors.toList());
 
-        return new CommentPageResponse(page.hasNext(), comments);
+        return new CommentPageResponse(
+                page.hasNext(),
+                page.getTotalPages(),
+                page.getTotalElements(),
+                comments);
     }
 }
